@@ -9,7 +9,7 @@ actual class DatabaseDriverFactory(
 ) {
     actual fun create(): SqlDriver {
         return AndroidSqliteDriver(
-            ContactDataBase.Schema,
+            ContactDtabase.Schema,
             context,
             "contact.db"
         )

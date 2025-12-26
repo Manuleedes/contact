@@ -100,7 +100,7 @@ android {
 }
 sqldelight{
     database("ContactDatabase"){
-        packageName = "com.plcoding.contactscomposemultiplatform.database"
+        packageName = "com.plcoding.contactscomposemultiplatform.ui.theme.database"
         sourceFolders = listOf("sqldelight")
     }
 }
