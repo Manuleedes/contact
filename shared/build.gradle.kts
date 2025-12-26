@@ -98,6 +98,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
+sqldelight{
+    database("ContactDatabase"){
+        packageName = "com.plcoding.contactscomposemultiplatform.database"
+        sourceFolders = listOf("sqldelight")
+    }
+}
+
 
 dependencies {
     implementation("androidx.core:core:1.10.1")
