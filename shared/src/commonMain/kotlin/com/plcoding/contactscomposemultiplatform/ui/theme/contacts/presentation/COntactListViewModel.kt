@@ -88,7 +88,7 @@ class ContactListViewModel(
                 )
             }
 //            ContactListEvent.OnAddPhotoClicked -> TODO()
-            
+
             is ContactListEvent.OnEmailChange -> {
                 newContact = newContact?.copy(
                     email = event.value
