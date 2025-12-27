@@ -2,11 +2,16 @@ package com.plcoding.contactscomposemultiplatform.ui.theme.contacts.data
 
 import com.plcoding.contactscomposemultiplatform.ui.theme.contacts.domain.Contact
 import com.plcoding.contactscomposemultiplatform.ui.theme.contacts.domain.ContactDataSource
+import com.plcoding.contactscomposemultiplatform.ui.theme.core.data.ImageStorage
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.supervisorScope
 import kotlinx.datetime.Clock
 
 class SqlDelightContactDataSource(
     db: ContactDataSource,
+    private val imageStorage: ImageStorage
+
 
 ): ContactDataSource{
     private val queries = db.contactQueries
@@ -17,21 +22,30 @@ class SqlDelightContactDataSource(
             .asFlow
             .mapToList()
             .map{ contactEntities ->
-            contactEntities.map{ contactEntity ->
-                contactEntity.toContact()
-            }
+                supervisorScope {
+                    contactEntities.map{
+                        async { it.toContact(imageStorage) }
+                    }
+                        .map{
+                            it.await()
+                        }
+                }
             }
     }
-
     override fun getRecentContacts(amount: Int): Flow<List<Contact>> {
         return queries
             .getRecentContacts(amount.toLong())
             .asFlow
             .mapToList()
             .map{ contactEntities ->
-                contactEntities.map{ contactEntity ->
-                    contactEntity.toContact()
+                supervisorScope {
+                contactEntities.map{
+                    async { it.toContact(imageStorage) }
                 }
+                    .map{
+                        it.await()
+                    }
+            }
             }
     }
 
